@@ -23,7 +23,13 @@ kotlin {
     }
     
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.3")
+                implementation("com.arkivanov.mvikotlin:mvikotlin:3.0.1")
+                implementation("com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines:3.0.1")
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
