@@ -2,7 +2,7 @@ import SwiftUI
 import shared
 import Combine
 
-struct ContentView: View {
+struct CounterView: View {
     var storeFactory: StoreFactory
 
     @StateObject private var proxy = CalculatorViewProxy()
@@ -27,6 +27,9 @@ struct ContentView: View {
             }
             Button(action: { proxy.dispatch(event: CalculatorViewEvent.DecrementClicked()) }) {
                 Text("Decrement")
+            }
+            Button(action: { proxy.dispatch(event: CalculatorViewEvent.SumClicked(n: 10)) }) {
+                Text("Sum")
             }
         }
         .onFirstAppear {

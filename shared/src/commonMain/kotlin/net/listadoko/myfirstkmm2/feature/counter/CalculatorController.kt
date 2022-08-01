@@ -19,8 +19,21 @@ class CalculatorController(lifecycle: Lifecycle,
     private val store = instanceKeeper.getStore {
         CalculatorStoreFactory(storeFactory).create()
     }
-
     private var binder: Binder? = null
+    private val statesToModel: CalculatorStore.State.() -> CalculatorView.Model =
+        {
+            CalculatorView.Model(
+                value = value.toString()
+            )
+        }
+    private val eventToIntent: CalculatorView.Event.() -> CalculatorStore.Intent =
+        {
+            when (this) {
+                is CalculatorView.Event.IncrementClicked -> CalculatorStore.Intent.Increment
+                is CalculatorView.Event.DecrementClicked -> CalculatorStore.Intent.Decrement
+                is CalculatorView.Event.SumClicked -> CalculatorStore.Intent.Sum(this.n)
+            }
+        }
 
     init {
         lifecycle.doOnDestroy(store::dispose)

@@ -16,5 +16,6 @@ interface CalculatorView : MviView<Model, Event> {
     sealed class Event {
         object IncrementClicked: Event()
         object DecrementClicked: Event()
+        data class SumClicked(val n: Int): Event()
     }
 }
