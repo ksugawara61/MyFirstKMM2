@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
@@ -19,16 +21,25 @@ kotlin {
         podfile = project.file("../iosApp/Podfile")
         framework {
             baseName = "shared"
+            export("com.badoo.reaktive:reaktive:1.2.2")
+            export("com.arkivanov.essenty:lifecycle:0.4.1")
+            export("com.arkivanov.essenty:instance-keeper:0.4.1")
+            export("com.arkivanov.mvikotlin:mvikotlin:3.0.0-beta02")
+            export("com.arkivanov.mvikotlin:mvikotlin-main:3.0.0-beta02")
+            export("com.arkivanov.mvikotlin:mvikotlin-logging:3.0.0-beta02")
         }
     }
     
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt")
-                implementation("com.arkivanov.mvikotlin:mvikotlin:3.0.0-beta02")
-                implementation("com.arkivanov.mvikotlin:mvikotlin-main:3.0.0-beta02")
-                implementation("com.arkivanov.mvikotlin:mvikotlin-extensions-coroutines:3.0.0-beta02")
+                api("com.badoo.reaktive:reaktive:1.2.2")
+                api("com.arkivanov.mvikotlin:mvikotlin:3.0.0-beta02")
+                api("com.arkivanov.mvikotlin:mvikotlin-main:3.0.0-beta02")
+                api("com.arkivanov.mvikotlin:mvikotlin-logging:3.0.0-beta02")
+                api("com.arkivanov.essenty:lifecycle:0.4.1")
+                api("com.arkivanov.essenty:instance-keeper:0.4.1")
+                implementation("com.arkivanov.mvikotlin:mvikotlin-extensions-reaktive:3.0.0-beta02")
             }
         }
         val commonTest by getting {

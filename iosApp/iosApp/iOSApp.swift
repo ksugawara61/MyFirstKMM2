@@ -1,10 +1,24 @@
 import SwiftUI
+import shared
+import Combine
 
 @main
 struct iOSApp: App {
-	var body: some Scene {
+    @StateObject private var holder = Holder()
+
+    var body: some Scene {
 		WindowGroup {
-			ContentView()
+			ContentView(
+                storeFactory: holder.storeFactory
+            )
 		}
 	}
+}
+
+private class Holder : ObservableObject {
+    let storeFactory: StoreFactory
+
+    init() {
+        storeFactory = LoggingStoreFactory(delegate: DefaultStoreFactory())
+    }
 }

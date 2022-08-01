@@ -2,7 +2,42 @@ import SwiftUI
 import shared
 import Combine
 
-class CalculatorViewProxy: MyBaseMviView<CalculatorViewModel, CalculatorViewEvent>, CalculatorView, ObservableObject {
+struct ContentView: View {
+    var storeFactory: StoreFactory
+
+    @StateObject private var proxy = CalculatorViewProxy()
+    @StateObject private var holder: ControllerHolder
+
+    init(storeFactory: StoreFactory) {
+        self.storeFactory = storeFactory
+        _holder = StateObject(wrappedValue: ControllerHolder { lifecycle in
+            CalculatorController(
+                lifecycle: lifecycle,
+                instanceKeeper: InstanceKeeperDispatcherKt.InstanceKeeperDispatcher(),
+                storeFactory: storeFactory
+            )
+        })
+    }
+
+	var body: some View {
+        VStack {
+            Text(proxy.model.value)
+            Button(action: { proxy.dispatch(event: CalculatorViewEvent.IncrementClicked()) }) {
+                Text("Increment")
+            }
+            Button(action: { proxy.dispatch(event: CalculatorViewEvent.DecrementClicked()) }) {
+                Text("Decrement")
+            }
+        }
+        .onFirstAppear {
+            holder.controller.onViewCreated(view: proxy, viewLifecycle: holder.lifecycle)
+        }
+        .onAppear { LifecycleRegistryExtKt.resume(holder.lifecycle) }
+        .onDisappear { LifecycleRegistryExtKt.stop(holder.lifecycle) }
+	}
+}
+
+private final class CalculatorViewProxy: BaseMviView<CalculatorViewModel, CalculatorViewEvent>, CalculatorView, ObservableObject {
 
     @Published var model = CalculatorViewModel()
 
@@ -11,25 +46,15 @@ class CalculatorViewProxy: MyBaseMviView<CalculatorViewModel, CalculatorViewEven
     }
 }
 
-struct ContentView: View {
-    @ObservedObject var proxy = CalculatorViewProxy()
-	let greet = Greeting().greeting()
+private final class ControllerHolder: ObservableObject {
+    let lifecycle: LifecycleRegistry = LifecycleRegistryKt.LifecycleRegistry()
+    var controller: CalculatorController
 
-	var body: some View {
-        VStack {
-            Text(proxy.model.value)
-            Button(action: { proxy.dispatch(event: CalculatorViewEvent.IncrementClicked()) }) {
-                Text("Increment")
-            }
-            Button(action: { proxy.dispatch(event: CalculatorViewEvent.IncrementClicked()) }) {
-                Text("Decrement")
-            }
-        }
-	}
-}
+    init(factory: (Lifecycle) -> CalculatorController) {
+        controller = factory(lifecycle)
+    }
 
-struct ContentView_Previews: PreviewProvider {
-	static var previews: some View {
-		ContentView()
-	}
+    deinit {
+        LifecycleRegistryExtKt.destroy(lifecycle)
+    }
 }
