@@ -1,11 +1,14 @@
 package net.listadoko.myfirstkmm2.feature.repo
 
+import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import net.listadoko.myfirstkmm2.feature.counter.CalculatorStore
+import net.listadoko.myfirstkmm2.feature.counter.CalculatorStoreFactory
 import net.listadoko.myfirstkmm2.repository.api.ApiClient
 import net.listadoko.myfirstkmm2.repository.api.GetGithubRepoRequest
 import net.listadoko.myfirstkmm2.repository.api.GithubRepoParameter
@@ -17,6 +20,7 @@ internal class RepoStoreFactory(private val storeFactory: StoreFactory) {
             name = "RepoStore",
             initialState = RepoStore.State(),
             executorFactory = ::ExecutorImpl,
+            reducer = ReducerImpl
         ) {}
 
     private sealed interface Msg {
@@ -41,5 +45,12 @@ internal class RepoStoreFactory(private val storeFactory: StoreFactory) {
                 dispatch(Msg.Repos(response))
             }
         }
+    }
+
+    private object ReducerImpl : Reducer<RepoStore.State, Msg> {
+        override fun RepoStore.State.reduce(msg: Msg): RepoStore.State =
+            when (msg) {
+                is Msg.Repos -> copy(repos = msg.repos)
+            }
     }
 }

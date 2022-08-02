@@ -8,9 +8,16 @@ struct iOSApp: App {
 
     var body: some Scene {
 		WindowGroup {
-			CounterView(
-                storeFactory: holder.storeFactory
-            )
+            TabView {
+                CalculatorScreen(storeFactory: holder.storeFactory).tabItem {
+                    Image(systemName: "plus.app")
+                    Text("Calculator")
+                }
+                RepoScreen(storeFactory: holder.storeFactory).tabItem {
+                    Image(systemName: "list.dash")
+                    Text("Repo")
+                }
+            }
 		}
 	}
 }
