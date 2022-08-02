@@ -3,13 +3,11 @@ package net.listadoko.myfirstkmm2.feature.counter
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveBootstrapper
-import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import com.badoo.reaktive.scheduler.computationScheduler
-import com.badoo.reaktive.scheduler.mainScheduler
-import com.badoo.reaktive.single.observeOn
-import com.badoo.reaktive.single.singleFromFunction
-import com.badoo.reaktive.single.subscribeOn
+import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineBootstrapper
+import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import net.listadoko.myfirstkmm2.feature.counter.CalculatorStore.Intent
 import net.listadoko.myfirstkmm2.feature.counter.CalculatorStore.State
 
@@ -31,16 +29,16 @@ internal class CalculatorStoreFactory(private val storeFactory: StoreFactory) {
         class Value(val value: Long) : Msg
     }
 
-    private inner class BootstrapperImpl : ReaktiveBootstrapper<Action>() {
+    private inner class BootstrapperImpl : CoroutineBootstrapper<Action>() {
         override fun invoke() {
-            singleFromFunction { (1L..20.toLong()).sum() }
-                .subscribeOn(computationScheduler)
-                .observeOn(mainScheduler)
-                .subscribeScoped { dispatch(Action.SetValue(it)) }
+            scope.launch {
+                val sum = withContext(Dispatchers.Default) { (1L..20.toLong()).sum() }
+                dispatch(Action.SetValue(sum))
+            }
         }
     }
 
-    private inner class ExecutorImpl : ReaktiveExecutor<Intent, Action, State, Msg, Nothing>() {
+    private inner class ExecutorImpl : CoroutineExecutor<Intent, Action, State, Msg, Nothing>() {
         override fun executeAction(action: Action, getState: () -> State) =
             when (action) {
                 is Action.SetValue-> dispatch((Msg.Value(action.value)))
@@ -54,10 +52,10 @@ internal class CalculatorStoreFactory(private val storeFactory: StoreFactory) {
             }
 
         private fun sum(n: Int) {
-            singleFromFunction { (1L..n.toLong()).sum() }
-                .subscribeOn(computationScheduler)
-                .observeOn(mainScheduler)
-                .subscribeScoped { dispatch((Msg.Value(it))) }
+            scope.launch {
+                val sum = withContext(Dispatchers.Default) { (1L..n.toLong()).sum() }
+                dispatch((Msg.Value(sum)))
+            }
         }
     }
 

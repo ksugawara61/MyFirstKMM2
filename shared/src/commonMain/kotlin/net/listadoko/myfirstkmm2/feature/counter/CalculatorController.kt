@@ -7,10 +7,10 @@ import com.arkivanov.mvikotlin.core.binder.Binder
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.arkivanov.mvikotlin.extensions.reaktive.bind
-import com.arkivanov.mvikotlin.extensions.reaktive.events
-import com.arkivanov.mvikotlin.extensions.reaktive.states
-import com.badoo.reaktive.observable.map
+import com.arkivanov.mvikotlin.extensions.coroutines.bind
+import com.arkivanov.mvikotlin.extensions.coroutines.states
+import com.arkivanov.mvikotlin.extensions.coroutines.events
+import kotlinx.coroutines.flow.map
 
 class CalculatorController(lifecycle: Lifecycle,
                            instanceKeeper: InstanceKeeper,
