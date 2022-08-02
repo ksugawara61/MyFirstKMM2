@@ -3,13 +3,12 @@ import shared
 import Combine
 
 struct CounterView: View {
-    var storeFactory: StoreFactory
-
     @StateObject private var proxy = CalculatorViewProxy()
     @StateObject private var holder: ControllerHolder
 
+    @State var greet = "Loading..."
+
     init(storeFactory: StoreFactory) {
-        self.storeFactory = storeFactory
         _holder = StateObject(wrappedValue: ControllerHolder { lifecycle in
             CalculatorController(
                 lifecycle: lifecycle,
@@ -31,6 +30,7 @@ struct CounterView: View {
             Button(action: { proxy.dispatch(event: CalculatorViewEvent.SumClicked(n: 10)) }) {
                 Text("Sum")
             }
+            Text(greet).onAppear { load() }
         }
         .onFirstAppear {
             holder.controller.onViewCreated(view: proxy, viewLifecycle: holder.lifecycle)
@@ -38,6 +38,13 @@ struct CounterView: View {
         .onAppear { LifecycleRegistryExtKt.resume(holder.lifecycle) }
         .onDisappear { LifecycleRegistryExtKt.stop(holder.lifecycle) }
 	}
+
+    private func load() {
+        Sample.shared.request(completionHandler: { result, error in
+            guard let result = result else { return }
+            print(result)
+        })
+    }
 }
 
 private final class CalculatorViewProxy: BaseMviView<CalculatorViewModel, CalculatorViewEvent>, CalculatorView, ObservableObject {
