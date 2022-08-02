@@ -1,8 +1,8 @@
-package net.listadoko.myfirstkmm2.feature.counter
+package net.listadoko.myfirstkmm2.feature.calculator
 
 import com.arkivanov.mvikotlin.core.view.MviView
-import net.listadoko.myfirstkmm2.feature.counter.CalculatorView.Model
-import net.listadoko.myfirstkmm2.feature.counter.CalculatorView.Event
+import net.listadoko.myfirstkmm2.feature.calculator.CalculatorView.Model
+import net.listadoko.myfirstkmm2.feature.calculator.CalculatorView.Event
 
 interface CalculatorView : MviView<Model, Event> {
     data class Model(

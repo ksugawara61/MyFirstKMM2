@@ -8,7 +8,7 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
-object ApiClient {
+internal object ApiClient {
     val client = HttpClient() {
         install(ContentNegotiation) {
             json(

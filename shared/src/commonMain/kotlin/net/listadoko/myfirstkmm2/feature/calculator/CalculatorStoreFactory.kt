@@ -1,4 +1,4 @@
-package net.listadoko.myfirstkmm2.feature.counter
+package net.listadoko.myfirstkmm2.feature.calculator
 
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.Store
@@ -8,8 +8,8 @@ import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import net.listadoko.myfirstkmm2.feature.counter.CalculatorStore.Intent
-import net.listadoko.myfirstkmm2.feature.counter.CalculatorStore.State
+import net.listadoko.myfirstkmm2.feature.calculator.CalculatorStore.Intent
+import net.listadoko.myfirstkmm2.feature.calculator.CalculatorStore.State
 
 internal class CalculatorStoreFactory(private val storeFactory: StoreFactory) {
     fun create(): CalculatorStore =

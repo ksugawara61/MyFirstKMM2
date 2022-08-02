@@ -17,8 +17,8 @@ import com.arkivanov.essenty.lifecycle.essentyLifecycle
 import com.arkivanov.mvikotlin.core.view.BaseMviView
 import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
-import net.listadoko.myfirstkmm2.feature.counter.CalculatorController
-import net.listadoko.myfirstkmm2.feature.counter.CalculatorView
+import net.listadoko.myfirstkmm2.feature.calculator.CalculatorController
+import net.listadoko.myfirstkmm2.feature.calculator.CalculatorView
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

@@ -1,8 +1,8 @@
-package net.listadoko.myfirstkmm2.feature.counter
+package net.listadoko.myfirstkmm2.feature.calculator
 
 import com.arkivanov.mvikotlin.core.store.Store
-import net.listadoko.myfirstkmm2.feature.counter.CalculatorStore.Intent
-import net.listadoko.myfirstkmm2.feature.counter.CalculatorStore.State
+import net.listadoko.myfirstkmm2.feature.calculator.CalculatorStore.Intent
+import net.listadoko.myfirstkmm2.feature.calculator.CalculatorStore.State
 
 internal interface CalculatorStore : Store<Intent, State, Nothing> {
     sealed interface Intent {

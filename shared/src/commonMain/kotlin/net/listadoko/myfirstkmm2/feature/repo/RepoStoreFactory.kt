@@ -7,14 +7,13 @@ import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import net.listadoko.myfirstkmm2.feature.counter.CalculatorStore
-import net.listadoko.myfirstkmm2.feature.counter.CalculatorStoreFactory
-import net.listadoko.myfirstkmm2.repository.api.ApiClient
-import net.listadoko.myfirstkmm2.repository.api.GetGithubRepoRequest
-import net.listadoko.myfirstkmm2.repository.api.GithubRepoParameter
-import net.listadoko.myfirstkmm2.repository.api.GithubRepoResponse
+import net.listadoko.myfirstkmm2.model.GithubRepo
+import net.listadoko.myfirstkmm2.repository.GithubRepository
 
-internal class RepoStoreFactory(private val storeFactory: StoreFactory) {
+internal class RepoStoreFactory(
+    private val storeFactory: StoreFactory,
+    private val repository: GithubRepository
+) {
     fun create(): RepoStore =
         object :RepoStore, Store<RepoStore.Intent, RepoStore.State, Nothing> by storeFactory.create(
             name = "RepoStore",
@@ -24,7 +23,7 @@ internal class RepoStoreFactory(private val storeFactory: StoreFactory) {
         ) {}
 
     private sealed interface Msg {
-        class Repos(val repos: List<GithubRepoResponse>): Msg
+        class Repos(val repos: List<GithubRepo>): Msg
     }
 
     private inner class ExecutorImpl : CoroutineExecutor<RepoStore.Intent, Nothing, RepoStore.State, Msg, Nothing>() {
@@ -36,12 +35,7 @@ internal class RepoStoreFactory(private val storeFactory: StoreFactory) {
 
         private fun fetch() {
             scope.launch {
-                val response: List<GithubRepoResponse> = withContext(Dispatchers.Default) {
-                    ApiClient.request(
-                        request = GetGithubRepoRequest("ksugawara61"),
-                        parameter = GithubRepoParameter(page = 1, perPage = 5)
-                    )
-                }
+                val response = withContext(Dispatchers.Default) { repository.fetchRepositories() }
                 dispatch(Msg.Repos(response))
             }
         }

@@ -19,7 +19,8 @@ struct RepoScreen: View {
             RepoController(
                 lifecycle: lifecycle,
                 instanceKeeper: InstanceKeeperDispatcherKt.InstanceKeeperDispatcher(),
-                storeFactory: storeFactory
+                storeFactory: storeFactory,
+                repository: GithubRepositoryImpl.shared
             )
         })
     }

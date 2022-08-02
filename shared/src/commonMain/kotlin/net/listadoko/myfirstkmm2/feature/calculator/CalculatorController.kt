@@ -1,4 +1,4 @@
-package net.listadoko.myfirstkmm2.feature.counter
+package net.listadoko.myfirstkmm2.feature.calculator
 
 import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import com.arkivanov.essenty.lifecycle.Lifecycle

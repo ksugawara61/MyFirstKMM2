@@ -11,14 +11,16 @@ import com.arkivanov.mvikotlin.extensions.coroutines.bind
 import com.arkivanov.mvikotlin.extensions.coroutines.events
 import com.arkivanov.mvikotlin.extensions.coroutines.states
 import kotlinx.coroutines.flow.map
+import net.listadoko.myfirstkmm2.repository.GithubRepository
 
 class RepoController(
     lifecycle: Lifecycle,
     instanceKeeper: InstanceKeeper,
-    private val storeFactory: StoreFactory
+    private val storeFactory: StoreFactory,
+    private val repository: GithubRepository
 ) {
     private val store = instanceKeeper.getStore {
-        RepoStoreFactory(storeFactory).create()
+        RepoStoreFactory(storeFactory, repository).create()
     }
     private var binder: Binder? = null
     private val statesToModel: RepoStore.State.() -> RepoView.Model =
