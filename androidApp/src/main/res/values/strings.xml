@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="greeting">hello</string>
+    <string name="title_activity_calculator">CalculatorActivity</string>
+    <string name="title_activity_repo">RepoActivity</string>
 </resources>
